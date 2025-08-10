@@ -1,0 +1,47 @@
+/* Import Urbanist font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-gray-50 text-gray-900 min-h-screen font-source-sans;
+    font-family: 'Urbanist', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-source-sans font-bold;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .heading-primary {
+    @apply font-source-sans font-black;
+  }
+
+  .body-text {
+    @apply font-source-sans;
+  }
+}
+
+@layer utilities {
+  .transition-all {
+    @apply transition-transform transition-opacity transition-colors duration-300;
+  }
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+}
