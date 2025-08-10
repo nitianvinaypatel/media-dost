@@ -1,18 +1,24 @@
-import React, { useState } from 'react';
-import { FaLightbulb, FaBullhorn, FaBullseye, FaTv, FaCheck } from 'react-icons/fa';
-import BrandSection from './FormSections/BrandSection';
-import CampaignSection from './FormSections/CampaignSection';
-import AudienceSection from './FormSections/AudienceSection';
-import MediaSection from './FormSections/MediaSection';
+import React, { useState } from "react";
+import {
+  FaLightbulb,
+  FaBullhorn,
+  FaBullseye,
+  FaTv,
+  FaCheck,
+} from "react-icons/fa";
+import BrandSection from "./FormSections/BrandSection";
+import CampaignSection from "./FormSections/CampaignSection";
+import AudienceSection from "./FormSections/AudienceSection";
+import MediaSection from "./FormSections/MediaSection";
 
 const PlanForm = ({ onSubmit }) => {
-  const [activeSection, setActiveSection] = useState('brand');
+  const [activeSection, setActiveSection] = useState("brand");
   const [completedSections, setCompletedSections] = useState([]);
   const [formData, setFormData] = useState({
     brand: {},
     campaign: {},
     audience: {},
-    media: {}
+    media: {},
   });
 
   const handleSectionChange = (section) => {
@@ -20,12 +26,12 @@ const PlanForm = ({ onSubmit }) => {
   };
 
   const updateFormData = (section, data) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [section]: { ...prev[section], ...data }
+      [section]: { ...prev[section], ...data },
     }));
     if (!completedSections.includes(section)) {
-      setCompletedSections(prev => [...prev, section]);
+      setCompletedSections((prev) => [...prev, section]);
     }
   };
 
@@ -36,49 +42,57 @@ const PlanForm = ({ onSubmit }) => {
 
   const sections = [
     {
-      id: 'brand',
-      title: 'About The Brand',
+      id: "brand",
+      title: "About The Brand",
       icon: <FaLightbulb className="text-xl" />,
-      component: <BrandSection 
-        data={formData.brand}
-        onChange={(data) => updateFormData('brand', data)}
-        onNext={() => handleSectionChange('campaign')}
-      />
+      component: (
+        <BrandSection
+          data={formData.brand}
+          onChange={(data) => updateFormData("brand", data)}
+          onNext={() => handleSectionChange("campaign")}
+        />
+      ),
     },
     {
-      id: 'campaign',
-      title: 'Campaign Details',
+      id: "campaign",
+      title: "Campaign Details",
       icon: <FaBullhorn className="text-xl" />,
-      component: <CampaignSection 
-        data={formData.campaign}
-        onChange={(data) => updateFormData('campaign', data)}
-        onNext={() => handleSectionChange('audience')}
-      />
+      component: (
+        <CampaignSection
+          data={formData.campaign}
+          onChange={(data) => updateFormData("campaign", data)}
+          onNext={() => handleSectionChange("audience")}
+        />
+      ),
     },
     {
-      id: 'audience',
-      title: 'Target Audience',
+      id: "audience",
+      title: "Target Audience",
       icon: <FaBullseye className="text-xl" />,
-      component: <AudienceSection 
-        data={formData.audience}
-        onChange={(data) => updateFormData('audience', data)}
-        onNext={() => handleSectionChange('media')}
-      />
+      component: (
+        <AudienceSection
+          data={formData.audience}
+          onChange={(data) => updateFormData("audience", data)}
+          onNext={() => handleSectionChange("media")}
+        />
+      ),
     },
     {
-      id: 'media',
-      title: 'Media Preferences',
+      id: "media",
+      title: "Media Preferences",
       icon: <FaTv className="text-xl" />,
-      component: <MediaSection 
-        data={formData.media}
-        onChange={(data) => updateFormData('media', data)}
-      />
-    }
+      component: (
+        <MediaSection
+          data={formData.media}
+          onChange={(data) => updateFormData("media", data)}
+        />
+      ),
+    },
   ];
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="flex items-center justify-between mb-8 px-4">
+      {/* <div className="flex items-center justify-between mb-8 px-4">
         {sections.map((section, index) => (
           <div key={section.id} className="flex items-center">
             <div 
@@ -106,28 +120,28 @@ const PlanForm = ({ onSubmit }) => {
             )}
           </div>
         ))}
-      </div>
+      </div> */}
 
       {sections.map((section) => (
-        <div 
-          key={section.id} 
+        <div
+          key={section.id}
           className={`bg-white rounded-xl border-2 transition-all duration-300 ${
-            activeSection === section.id 
-              ? 'border-orange-500 shadow-lg shadow-orange-100' 
+            activeSection === section.id
+              ? "border-orange-500 shadow-lg shadow-orange-100"
               : completedSections.includes(section.id)
-                ? 'border-green-500'
-                : 'border-gray-200'
+              ? "border-green-500"
+              : "border-gray-200"
           }`}
         >
           <button
             type="button"
             onClick={() => handleSectionChange(section.id)}
             className={`w-full flex items-center p-6 text-left transition-all ${
-              activeSection === section.id 
-                ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-t-xl' 
+              activeSection === section.id
+                ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-t-xl"
                 : completedSections.includes(section.id)
-                  ? 'bg-gradient-to-r from-green-500 to-green-600 text-white rounded-t-xl'
-                  : 'bg-gray-50 text-gray-700 hover:bg-gray-100 rounded-xl'
+                ? "bg-gradient-to-r from-green-500 to-green-600 text-white rounded-t-xl"
+                : "bg-gray-50 text-gray-700 hover:bg-gray-100 rounded-xl"
             }`}
           >
             <span className="mr-4">{section.icon}</span>
@@ -135,22 +149,29 @@ const PlanForm = ({ onSubmit }) => {
             <span className="ml-auto">
               <svg
                 className={`w-5 h-5 transform transition-transform ${
-                  activeSection === section.id ? 'rotate-180' : ''
+                  activeSection === section.id ? "rotate-180" : ""
                 }`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
               </svg>
             </span>
           </button>
-          
-          <div className={`transition-all duration-500 ease-in-out ${
-            activeSection === section.id 
-              ? 'max-h-[2000px] opacity-100 p-6' 
-              : 'max-h-0 opacity-0 overflow-hidden'
-          }`}>
+
+          <div
+            className={`transition-all duration-500 ease-in-out ${
+              activeSection === section.id
+                ? "max-h-[2000px] opacity-100 p-6"
+                : "max-h-0 opacity-0 overflow-hidden"
+            }`}
+          >
             {section.component}
           </div>
         </div>
@@ -169,4 +190,4 @@ const PlanForm = ({ onSubmit }) => {
   );
 };
 
-export default PlanForm; 
+export default PlanForm;
