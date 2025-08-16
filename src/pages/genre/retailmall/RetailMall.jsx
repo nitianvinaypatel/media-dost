@@ -105,6 +105,7 @@ function RetailMall() {
   });
 
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [openModal, setOpenModal] = useState(null);
   const [searchTerms, setSearchTerms] = useState({});
   const [selectedProduct, setSelectedProduct] = useState(null);
   const dropdownRefs = useRef({});
@@ -188,6 +189,18 @@ function RetailMall() {
     }
   };
 
+  const toggleModal = (modalId) => {
+    setOpenModal(openModal === modalId ? null : modalId);
+    // Clear search term when closing modal
+    if (openModal === modalId) {
+      setSearchTerms((prev) => ({ ...prev, [modalId]: "" }));
+    }
+  };
+
+  const closeModal = () => {
+    setOpenModal(null);
+  };
+
   const handleFilterChange = (filterType, value, checked) => {
     setFilters((prev) => ({
       ...prev,
@@ -268,7 +281,7 @@ function RetailMall() {
       <div className="relative" ref={(el) => (dropdownRefs.current[id] = el)}>
         <button
           type="button"
-          onClick={() => toggleDropdown(id)}
+          onClick={() => toggleModal(id)}
           className={`relative w-full cursor-pointer rounded-lg border px-4 py-3 text-left focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ${
             activeCount > 0 || (isSortFilter && filters.sortBy)
               ? "bg-blue-50 border-blue-300 text-blue-900"
@@ -291,70 +304,156 @@ function RetailMall() {
           </span>
         </button>
 
-        {isOpen && (
-          <div className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-            {searchable && !isSortFilter && (
-              <div className="sticky top-0 bg-white px-3 py-2 border-b border-gray-200">
-                <input
-                  type="text"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder={`Search ${title.toLowerCase()}...`}
-                  value={searchTerm}
-                  onChange={(e) => handleSearchChange(id, e.target.value)}
-                  onClick={(e) => e.stopPropagation()}
-                />
-              </div>
-            )}
-
-            {isSortFilter ? (
-              <div>
-                {options.map((option) => (
-                  <label
-                    key={option.value}
-                    className="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer"
+        {openModal === id && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+            onClick={closeModal}
+          >
+            <div
+              className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[80vh] overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div className="px-6 py-4 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-medium text-gray-900">
+                    Select {title}
+                  </h3>
+                  <button
+                    onClick={closeModal}
+                    className="text-gray-400 hover:text-gray-600 focus:outline-none"
                   >
-                    <input
-                      type="radio"
-                      name="sortBy"
-                      value={option.value}
-                      checked={filters.sortBy === option.value}
-                      onChange={(e) => handleSortChange(e.target.value)}
-                      className="mr-3 text-blue-600 focus:ring-blue-500"
-                    />
-                    <span className="text-gray-900">{option.label}</span>
-                  </label>
-                ))}
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
-            ) : (
-              <div>
-                {filteredOptions.length === 0 ? (
-                  <div className="px-3 py-2 text-gray-500 text-sm">
-                    No options found
+
+              {/* Search Section */}
+              {searchable && !isSortFilter && (
+                <div className="p-4 border-b border-gray-200">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder={`Search ${title.toLowerCase()}...`}
+                      className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      value={searchTerm}
+                      onChange={(e) => handleSearchChange(id, e.target.value)}
+                    />
+                    {searchTerm && (
+                      <button
+                        className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
+                        onClick={() => handleSearchChange(id, "")}
+                      >
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Options Section */}
+              <div className="max-h-64 overflow-y-auto p-4">
+                {isSortFilter ? (
+                  <div className="space-y-2">
+                    {options.map((option) => (
+                      <label
+                        key={option.value}
+                        className="flex items-center p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
+                      >
+                        <input
+                          type="radio"
+                          name="sortBy"
+                          value={option.value}
+                          checked={filters.sortBy === option.value}
+                          onChange={(e) => handleSortChange(e.target.value)}
+                          className="mr-3 text-blue-600 focus:ring-blue-500 w-4 h-4"
+                        />
+                        <span className="text-gray-700 font-medium">
+                          {option.label}
+                        </span>
+                      </label>
+                    ))}
                   </div>
                 ) : (
-                  filteredOptions.map((option) => (
-                    <label
-                      key={option}
-                      className="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={filters[filterType]?.includes(option) || false}
-                        onChange={(e) =>
-                          handleFilterChange(
-                            filterType,
-                            option,
-                            e.target.checked
-                          )
-                        }
-                        className="mr-3 rounded text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-gray-900">{option}</span>
-                    </label>
-                  ))
+                  <div>
+                    {filteredOptions.length === 0 ? (
+                      <p className="text-center py-8 text-gray-500">
+                        No options found
+                      </p>
+                    ) : (
+                      <div className="space-y-2">
+                        {filteredOptions.map((option) => (
+                          <label
+                            key={option}
+                            className="flex items-center p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={
+                                filters[filterType]?.includes(option) || false
+                              }
+                              onChange={(e) =>
+                                handleFilterChange(
+                                  filterType,
+                                  option,
+                                  e.target.checked
+                                )
+                              }
+                              className="mr-3 rounded text-blue-600 focus:ring-blue-500 w-4 h-4"
+                            />
+                            <span className="text-gray-700 font-medium">
+                              {option}
+                            </span>
+                          </label>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
-            )}
+
+              {/* Modal Footer */}
+              <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
+                <div className="flex justify-end space-x-3">
+                  <button
+                    onClick={closeModal}
+                    className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={closeModal}
+                    className="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    Apply
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>
@@ -475,55 +574,71 @@ function RetailMall() {
             <h2 className="text-xl font-semibold text-gray-900">
               Filter & Sort Retail Spaces
             </h2>
-            <button
-              onClick={clearAllFilters}
-              className="text-sm text-red-600 hover:text-red-800 font-medium transition-colors duration-200"
-            >
-              <i className="fas fa-times mr-1"></i>
-              Clear All Filters
-            </button>
+            {Object.values(filters).some((filter) =>
+              Array.isArray(filter) ? filter.length > 0 : filter !== ""
+            ) && (
+              <button
+                onClick={clearAllFilters}
+                className="text-sm text-red-600 hover:text-red-800 font-medium transition-colors duration-200"
+              >
+                <i className="fas fa-times mr-1"></i>
+                Clear All Filters
+              </button>
+            )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-            <FilterDropdown
-              id="location"
-              title="Location"
-              options={locations}
-              filterType="location"
-            />
-            <FilterDropdown
-              id="address"
-              title="Address"
-              options={addresses}
-              filterType="address"
-            />
-            <FilterDropdown
-              id="type"
-              title="Type"
-              options={advertisingTypes}
-              filterType="type"
-            />
-            <FilterDropdown
-              id="lighting"
-              title="Lighting"
-              options={lightingOptions}
-              filterType="lighting"
-            />
-            <FilterDropdown
-              id="priceRange"
-              title="Price Range"
-              options={priceRanges}
-              filterType="priceRange"
-              searchable={false}
-            />
-            <FilterDropdown
-              id="sortBy"
-              title="Sort By"
-              options={sortOptions}
-              filterType="sortBy"
-              searchable={false}
-              isSortFilter={true}
-            />
+          <div className="flex overflow-x-auto scrollbar-hide gap-4">
+            <div className="flex-shrink-0 min-w-[160px]">
+              <FilterDropdown
+                id="location"
+                title="Location"
+                options={locations}
+                filterType="location"
+              />
+            </div>
+            <div className="flex-shrink-0 min-w-[160px]">
+              <FilterDropdown
+                id="address"
+                title="Address"
+                options={addresses}
+                filterType="address"
+              />
+            </div>
+            <div className="flex-shrink-0 min-w-[160px]">
+              <FilterDropdown
+                id="type"
+                title="Type"
+                options={advertisingTypes}
+                filterType="type"
+              />
+            </div>
+            <div className="flex-shrink-0 min-w-[160px]">
+              <FilterDropdown
+                id="lighting"
+                title="Lighting"
+                options={lightingOptions}
+                filterType="lighting"
+              />
+            </div>
+            <div className="flex-shrink-0 min-w-[160px]">
+              <FilterDropdown
+                id="priceRange"
+                title="Price Range"
+                options={priceRanges}
+                filterType="priceRange"
+                searchable={false}
+              />
+            </div>
+            <div className="flex-shrink-0 min-w-[160px]">
+              <FilterDropdown
+                id="sortBy"
+                title="Sort By"
+                options={sortOptions}
+                filterType="sortBy"
+                searchable={false}
+                isSortFilter={true}
+              />
+            </div>
           </div>
         </div>
 

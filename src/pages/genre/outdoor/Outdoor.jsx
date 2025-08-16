@@ -105,6 +105,7 @@ function Outdoor() {
   });
 
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [openModal, setOpenModal] = useState(null);
   const [searchTerms, setSearchTerms] = useState({});
   const [selectedProduct, setSelectedProduct] = useState(null);
   const dropdownRefs = useRef({});
@@ -186,6 +187,18 @@ function Outdoor() {
     if (openDropdown === dropdownId) {
       setSearchTerms((prev) => ({ ...prev, [dropdownId]: "" }));
     }
+  };
+
+  const toggleModal = (modalId) => {
+    setOpenModal(openModal === modalId ? null : modalId);
+    // Clear search term when closing modal
+    if (openModal === modalId) {
+      setSearchTerms((prev) => ({ ...prev, [modalId]: "" }));
+    }
+  };
+
+  const closeModal = () => {
+    setOpenModal(null);
   };
 
   const handleFilterChange = (filterType, value, checked) => {
@@ -274,7 +287,7 @@ function Outdoor() {
           }`}
           onClick={(e) => {
             e.stopPropagation();
-            toggleDropdown(id);
+            toggleModal(id);
           }}
         >
           <span
@@ -301,91 +314,149 @@ function Outdoor() {
           </svg>
         </button>
 
-        {openDropdown === id && (
-          <div className="absolute z-20 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-xl max-h-64 overflow-hidden">
-            {searchable && (
-              <div className="p-3 border-b border-gray-200">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder={`Search ${title.toLowerCase()}...`}
-                    className="w-full px-3 py-2 pr-8 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    value={searchTerm}
-                    onChange={(e) =>
-                      setSearchTerms((prev) => ({
-                        ...prev,
-                        [id]: e.target.value,
-                      }))
-                    }
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                  {searchTerm && (
-                    <button
-                      className="absolute right-2 top-2 text-gray-400 hover:text-gray-600"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSearchTerms((prev) => ({ ...prev, [id]: "" }));
-                      }}
+        {openModal === id && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+            onClick={closeModal}
+          >
+            <div
+              className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[80vh] overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div className="px-6 py-4 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-medium text-gray-900">
+                    Select {title}
+                  </h3>
+                  <button
+                    onClick={closeModal}
+                    className="text-gray-400 hover:text-gray-600 focus:outline-none"
+                  >
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M6 18L18 6M6 6l12 12"
-                        />
-                      </svg>
-                    </button>
-                  )}
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
                 </div>
               </div>
-            )}
 
-            <div className="max-h-48 overflow-y-auto p-2">
-              {filteredOptions.length > 0 ? (
-                filteredOptions.map((option, index) => {
-                  const optionValue = isSortFilter ? option.value : option;
-                  const optionLabel = isSortFilter ? option.label : option;
-
-                  return (
-                    <label
-                      key={index}
-                      className="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <input
-                        type={isSortFilter ? "radio" : "checkbox"}
-                        name={isSortFilter ? "sort" : undefined}
-                        className="mr-3 text-blue-600 focus:ring-blue-500"
-                        checked={
-                          isSortFilter
-                            ? filters.sortBy === optionValue
-                            : filters[filterType].includes(optionValue)
-                        }
-                        onChange={(e) => {
-                          if (isSortFilter) {
-                            handleSortChange(optionValue);
-                          } else {
-                            handleFilterChange(
-                              filterType,
-                              optionValue,
-                              e.target.checked
-                            );
-                          }
+              {/* Search Section */}
+              {searchable && (
+                <div className="p-4 border-b border-gray-200">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder={`Search ${title.toLowerCase()}...`}
+                      className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      value={searchTerm}
+                      onChange={(e) =>
+                        setSearchTerms((prev) => ({
+                          ...prev,
+                          [id]: e.target.value,
+                        }))
+                      }
+                    />
+                    {searchTerm && (
+                      <button
+                        className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
+                        onClick={() => {
+                          setSearchTerms((prev) => ({ ...prev, [id]: "" }));
                         }}
-                      />
-                      <span className="text-gray-700">{optionLabel}</span>
-                    </label>
-                  );
-                })
-              ) : (
-                <p className="p-2 text-gray-500">No options found</p>
+                      >
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
+                </div>
               )}
+
+              {/* Options Section */}
+              <div className="max-h-64 overflow-y-auto p-4">
+                {filteredOptions.length > 0 ? (
+                  <div className="space-y-2">
+                    {filteredOptions.map((option, index) => {
+                      const optionValue = isSortFilter ? option.value : option;
+                      const optionLabel = isSortFilter ? option.label : option;
+
+                      return (
+                        <label
+                          key={index}
+                          className="flex items-center p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
+                        >
+                          <input
+                            type={isSortFilter ? "radio" : "checkbox"}
+                            name={isSortFilter ? "sort" : undefined}
+                            className="mr-3 text-blue-600 focus:ring-blue-500 w-4 h-4"
+                            checked={
+                              isSortFilter
+                                ? filters.sortBy === optionValue
+                                : filters[filterType].includes(optionValue)
+                            }
+                            onChange={(e) => {
+                              if (isSortFilter) {
+                                handleSortChange(optionValue);
+                              } else {
+                                handleFilterChange(
+                                  filterType,
+                                  optionValue,
+                                  e.target.checked
+                                );
+                              }
+                            }}
+                          />
+                          <span className="text-gray-700 font-medium">
+                            {optionLabel}
+                          </span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="text-center py-8 text-gray-500">
+                    No options found
+                  </p>
+                )}
+              </div>
+
+              {/* Modal Footer */}
+              <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
+                <div className="flex justify-end space-x-3">
+                  <button
+                    onClick={closeModal}
+                    className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={closeModal}
+                    className="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    Apply
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -498,62 +569,74 @@ function Outdoor() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            <h1 className="text-xl font-bold text-gray-900 mb-4">
               Explore Our Outdoor Advertising Options
             </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            {/* <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Find the perfect outdoor advertising space for your brand. From
               billboards to digital screens, we have premium locations across
               major cities.
-            </p>
+            </p> */}
           </div>
 
           {/* Filters */}
           <div className="mb-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
-              <FilterDropdown
-                id="location-dropdown"
-                title="Location"
-                options={locations}
-                filterType="location"
-              />
+            <div className="flex overflow-x-auto scrollbar-hide gap-4 mb-6 pb-2">
+              <div className="flex-shrink-0 min-w-[160px]">
+                <FilterDropdown
+                  id="location-dropdown"
+                  title="Location"
+                  options={locations}
+                  filterType="location"
+                />
+              </div>
 
-              <FilterDropdown
-                id="address-dropdown"
-                title="Address"
-                options={addresses}
-                filterType="address"
-              />
+              <div className="flex-shrink-0 min-w-[160px]">
+                <FilterDropdown
+                  id="address-dropdown"
+                  title="Address"
+                  options={addresses}
+                  filterType="address"
+                />
+              </div>
 
-              <FilterDropdown
-                id="type-dropdown"
-                title="Type"
-                options={advertisingTypes}
-                filterType="type"
-              />
+              <div className="flex-shrink-0 min-w-[160px]">
+                <FilterDropdown
+                  id="type-dropdown"
+                  title="Type"
+                  options={advertisingTypes}
+                  filterType="type"
+                />
+              </div>
 
-              <FilterDropdown
-                id="sort-dropdown"
-                title="Sort By"
-                options={sortOptions}
-                filterType="sortBy"
-                searchable={false}
-                isSortFilter={true}
-              />
+              <div className="flex-shrink-0 min-w-[160px]">
+                <FilterDropdown
+                  id="sort-dropdown"
+                  title="Sort By"
+                  options={sortOptions}
+                  filterType="sortBy"
+                  searchable={false}
+                  isSortFilter={true}
+                />
+              </div>
 
-              <FilterDropdown
-                id="lighting-dropdown"
-                title="Lighting"
-                options={lightingOptions}
-                filterType="lighting"
-              />
+              <div className="flex-shrink-0 min-w-[160px]">
+                <FilterDropdown
+                  id="lighting-dropdown"
+                  title="Lighting"
+                  options={lightingOptions}
+                  filterType="lighting"
+                />
+              </div>
 
-              <FilterDropdown
-                id="price-dropdown"
-                title="Price Range"
-                options={priceRanges}
-                filterType="priceRange"
-              />
+              <div className="flex-shrink-0 min-w-[160px]">
+                <FilterDropdown
+                  id="price-dropdown"
+                  title="Price Range"
+                  options={priceRanges}
+                  filterType="priceRange"
+                />
+              </div>
             </div>
 
             {/* Results Count */}

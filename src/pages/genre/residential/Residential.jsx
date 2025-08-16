@@ -11,7 +11,7 @@ const mockProducts = [
     price: 75,
     lighting: "LED",
     image_1: "parking1.jpg",
-    state: "Maharashtra"
+    state: "Maharashtra",
   },
   {
     id: 2,
@@ -21,7 +21,7 @@ const mockProducts = [
     price: 75,
     lighting: "Back Lit",
     image_1: "wall1.jpg",
-    state: "Delhi"
+    state: "Delhi",
   },
   {
     id: 3,
@@ -31,7 +31,7 @@ const mockProducts = [
     price: 75,
     lighting: "Non Lit",
     image_1: "notice1.jpg",
-    state: "Karnataka"
+    state: "Karnataka",
   },
   // Add more cities from the website...
   {
@@ -42,7 +42,7 @@ const mockProducts = [
     price: 75,
     lighting: "Front Lit",
     image_1: "gate1.jpg",
-    state: "Telangana"
+    state: "Telangana",
   },
   {
     id: 5,
@@ -52,8 +52,8 @@ const mockProducts = [
     price: 75,
     lighting: "LED",
     image_1: "playground1.jpg",
-    state: "Tamil Nadu"
-  }
+    state: "Tamil Nadu",
+  },
 ];
 
 const advertisingTypes = [
@@ -62,7 +62,7 @@ const advertisingTypes = [
   "Gate and Entrance Branding",
   "Parking Area",
   "Playground and Garden Area Ads",
-  "Notice Board"
+  "Notice Board",
 ];
 
 const priceRanges = [
@@ -74,12 +74,12 @@ const priceRanges = [
   "₹75,000 - ₹1,00,000",
   "₹1,00,000 - ₹3,00,000",
   "₹3,00,000 - ₹5,00,000",
-  "Above ₹5,00,000"
+  "Above ₹5,00,000",
 ];
 
 const sortOptions = [
   { value: "price-low-high", label: "Price - Low to High" },
-  { value: "price-high-low", label: "Price - High to Low" }
+  { value: "price-high-low", label: "Price - High to Low" },
 ];
 
 function Residential() {
@@ -90,16 +90,19 @@ function Residential() {
     type: [],
     priceRange: [],
     sortBy: "",
-    state: []
+    state: [],
   });
 
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [openModal, setOpenModal] = useState(null);
   const [searchTerms, setSearchTerms] = useState({});
   const dropdownRefs = useRef({});
 
   // Get unique locations, addresses and states from mock data
   const locations = [...new Set(mockProducts.map((p) => p.location))].sort();
-  const addresses = [...new Set(mockProducts.map((p) => p.full_address))].sort();
+  const addresses = [
+    ...new Set(mockProducts.map((p) => p.full_address)),
+  ].sort();
   const states = [...new Set(mockProducts.map((p) => p.state))].sort();
 
   // Filter and sort products based on current filters
@@ -119,14 +122,16 @@ function Residential() {
       let priceMatch = true;
       if (filters.priceRange.length > 0) {
         priceMatch = filters.priceRange.some((range) => {
-          const [min, max] = range.split(" - ").map(str => 
-            parseInt(str.replace(/[₹,]/g, ""))
-          );
+          const [min, max] = range
+            .split(" - ")
+            .map((str) => parseInt(str.replace(/[₹,]/g, "")));
           return product.price >= min && (!max || product.price <= max);
         });
       }
 
-      return locationMatch && addressMatch && typeMatch && stateMatch && priceMatch;
+      return (
+        locationMatch && addressMatch && typeMatch && stateMatch && priceMatch
+      );
     });
 
     // Apply sorting
@@ -144,6 +149,17 @@ function Residential() {
     if (openDropdown === dropdownId) {
       setSearchTerms((prev) => ({ ...prev, [dropdownId]: "" }));
     }
+  };
+
+  const toggleModal = (modalId) => {
+    setOpenModal(openModal === modalId ? null : modalId);
+    if (openModal === modalId) {
+      setSearchTerms((prev) => ({ ...prev, [modalId]: "" }));
+    }
+  };
+
+  const closeModal = () => {
+    setOpenModal(null);
   };
 
   const handleFilterChange = (filterType, value, checked) => {
@@ -191,7 +207,7 @@ function Residential() {
       type: [],
       priceRange: [],
       sortBy: "",
-      state: []
+      state: [],
     });
     setSearchTerms({});
     setOpenDropdown(null);
@@ -228,18 +244,16 @@ function Residential() {
       <div className="relative" ref={(el) => (dropdownRefs.current[id] = el)}>
         <button
           className={`flex items-center justify-between w-full px-4 py-2 text-left bg-white border rounded-lg transition-colors ${
-            hasActiveFilters 
-              ? "border-green-500 bg-green-50 text-green-700" 
+            hasActiveFilters
+              ? "border-green-500 bg-green-50 text-green-700"
               : "border-gray-300 hover:border-green-500 text-gray-700"
           }`}
           onClick={(e) => {
             e.stopPropagation();
-            toggleDropdown(id);
+            toggleModal(id);
           }}
         >
-          <span className="font-medium">
-            {displayTitle}
-          </span>
+          <span className="font-medium">{displayTitle}</span>
           <svg
             className={`w-5 h-5 transform transition-transform ${
               openDropdown === id ? "rotate-180" : ""
@@ -257,91 +271,149 @@ function Residential() {
           </svg>
         </button>
 
-        {openDropdown === id && (
-          <div className="absolute z-20 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-xl max-h-64 overflow-hidden">
-            {searchable && (
-              <div className="p-3 border-b border-gray-200">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder={`Search ${title.toLowerCase()}...`}
-                    className="w-full px-3 py-2 pr-8 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    value={searchTerm}
-                    onChange={(e) =>
-                      setSearchTerms((prev) => ({
-                        ...prev,
-                        [id]: e.target.value,
-                      }))
-                    }
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                  {searchTerm && (
-                    <button
-                      className="absolute right-2 top-2 text-gray-400 hover:text-gray-600"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSearchTerms((prev) => ({ ...prev, [id]: "" }));
-                      }}
+        {openModal === id && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+            onClick={closeModal}
+          >
+            <div
+              className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[80vh] overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div className="px-6 py-4 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-medium text-gray-900">
+                    Select {title}
+                  </h3>
+                  <button
+                    onClick={closeModal}
+                    className="text-gray-400 hover:text-gray-600 focus:outline-none"
+                  >
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M6 18L18 6M6 6l12 12"
-                        />
-                      </svg>
-                    </button>
-                  )}
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
                 </div>
               </div>
-            )}
 
-            <div className="max-h-48 overflow-y-auto p-2">
-              {filteredOptions.length > 0 ? (
-                filteredOptions.map((option, index) => {
-                  const optionValue = isSortFilter ? option.value : option;
-                  const optionLabel = isSortFilter ? option.label : option;
-
-                  return (
-                    <label
-                      key={index}
-                      className="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <input
-                        type={isSortFilter ? "radio" : "checkbox"}
-                        name={isSortFilter ? "sort" : undefined}
-                        className="mr-3 text-green-600 focus:ring-green-500"
-                        checked={
-                          isSortFilter
-                            ? filters.sortBy === optionValue
-                            : filters[filterType].includes(optionValue)
-                        }
-                        onChange={(e) => {
-                          if (isSortFilter) {
-                            handleSortChange(optionValue);
-                          } else {
-                            handleFilterChange(
-                              filterType,
-                              optionValue,
-                              e.target.checked
-                            );
-                          }
+              {/* Search Section */}
+              {searchable && (
+                <div className="p-4 border-b border-gray-200">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder={`Search ${title.toLowerCase()}...`}
+                      className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      value={searchTerm}
+                      onChange={(e) =>
+                        setSearchTerms((prev) => ({
+                          ...prev,
+                          [id]: e.target.value,
+                        }))
+                      }
+                    />
+                    {searchTerm && (
+                      <button
+                        className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
+                        onClick={() => {
+                          setSearchTerms((prev) => ({ ...prev, [id]: "" }));
                         }}
-                      />
-                      <span className="text-gray-700">{optionLabel}</span>
-                    </label>
-                  );
-                })
-              ) : (
-                <p className="p-2 text-gray-500">No options found</p>
+                      >
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
+                </div>
               )}
+
+              {/* Options Section */}
+              <div className="max-h-64 overflow-y-auto p-4">
+                {filteredOptions.length > 0 ? (
+                  <div className="space-y-2">
+                    {filteredOptions.map((option, index) => {
+                      const optionValue = isSortFilter ? option.value : option;
+                      const optionLabel = isSortFilter ? option.label : option;
+
+                      return (
+                        <label
+                          key={index}
+                          className="flex items-center p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
+                        >
+                          <input
+                            type={isSortFilter ? "radio" : "checkbox"}
+                            name={isSortFilter ? "sort" : undefined}
+                            className="mr-3 text-green-600 focus:ring-green-500 w-4 h-4"
+                            checked={
+                              isSortFilter
+                                ? filters.sortBy === optionValue
+                                : filters[filterType].includes(optionValue)
+                            }
+                            onChange={(e) => {
+                              if (isSortFilter) {
+                                handleSortChange(optionValue);
+                              } else {
+                                handleFilterChange(
+                                  filterType,
+                                  optionValue,
+                                  e.target.checked
+                                );
+                              }
+                            }}
+                          />
+                          <span className="text-gray-700 font-medium">
+                            {optionLabel}
+                          </span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="text-center py-8 text-gray-500">
+                    No options found
+                  </p>
+                )}
+              </div>
+
+              {/* Modal Footer */}
+              <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
+                <div className="flex justify-end space-x-3">
+                  <button
+                    onClick={closeModal}
+                    className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={closeModal}
+                    className="px-4 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  >
+                    Apply
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -436,58 +508,71 @@ function Residential() {
               Explore Residential Advertising Choices
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Find the perfect residential advertising space for your brand across major Indian cities.
-              From society gates to notice boards, we have premium locations in residential complexes.
+              Find the perfect residential advertising space for your brand
+              across major Indian cities. From society gates to notice boards,
+              we have premium locations in residential complexes.
             </p>
           </div>
 
           {/* Filters */}
           <div className="mb-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
-              <FilterDropdown
-                id="location-dropdown"
-                title="Location"
-                options={locations}
-                filterType="location"
-              />
+            <div className="flex overflow-x-auto scrollbar-hide gap-4 mb-6 pb-2">
+              <div className="flex-shrink-0 min-w-[160px]">
+                <FilterDropdown
+                  id="location-dropdown"
+                  title="Location"
+                  options={locations}
+                  filterType="location"
+                />
+              </div>
 
-              <FilterDropdown
-                id="state-dropdown"
-                title="State"
-                options={states}
-                filterType="state"
-              />
+              <div className="flex-shrink-0 min-w-[160px]">
+                <FilterDropdown
+                  id="state-dropdown"
+                  title="State"
+                  options={states}
+                  filterType="state"
+                />
+              </div>
 
-              <FilterDropdown
-                id="address-dropdown"
-                title="Full Address"
-                options={addresses}
-                filterType="address"
-              />
+              <div className="flex-shrink-0 min-w-[160px]">
+                <FilterDropdown
+                  id="address-dropdown"
+                  title="Full Address"
+                  options={addresses}
+                  filterType="address"
+                />
+              </div>
 
-              <FilterDropdown
-                id="type-dropdown"
-                title="Type"
-                options={advertisingTypes}
-                filterType="type"
-              />
+              <div className="flex-shrink-0 min-w-[160px]">
+                <FilterDropdown
+                  id="type-dropdown"
+                  title="Type"
+                  options={advertisingTypes}
+                  filterType="type"
+                />
+              </div>
 
-              <FilterDropdown
-                id="sort-dropdown"
-                title="Sort By"
-                options={sortOptions}
-                filterType="sortBy"
-                searchable={false}
-                isSortFilter={true}
-              />
+              <div className="flex-shrink-0 min-w-[160px]">
+                <FilterDropdown
+                  id="sort-dropdown"
+                  title="Sort By"
+                  options={sortOptions}
+                  filterType="sortBy"
+                  searchable={false}
+                  isSortFilter={true}
+                />
+              </div>
 
-              <FilterDropdown
-                id="price-dropdown"
-                title="Price Range"
-                options={priceRanges}
-                filterType="priceRange"
-                searchable={false}
-              />
+              <div className="flex-shrink-0 min-w-[160px]">
+                <FilterDropdown
+                  id="price-dropdown"
+                  title="Price Range"
+                  options={priceRanges}
+                  filterType="priceRange"
+                  searchable={false}
+                />
+              </div>
             </div>
 
             {/* Results Count */}
@@ -550,7 +635,8 @@ function Residential() {
                 No Results Found
               </h3>
               <p className="text-gray-600 mb-4">
-                Try adjusting your filters to find more residential advertising options
+                Try adjusting your filters to find more residential advertising
+                options
               </p>
               <button
                 onClick={clearAllFilters}

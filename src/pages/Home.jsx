@@ -134,71 +134,25 @@ const Home = () => {
   // Client data with better structure
   const clients = [
     {
-      name: "Startly Innovations",
-      type: "Tech Startup",
       logo: innovationsLogo,
-      description: "Innovative tech solutions for modern businesses",
-      location: "Jamui, Bihar",
     },
     {
-      name: "Government Engineering College Jamui",
-      type: "Educational Institution",
       logo: gecjamuiLogo,
-      description: "Premier engineering institution in Bihar",
-      location: "Jamui, Bihar",
     },
     {
-      name: "Maharaja Restaurant Jamui",
-      type: "Restaurant",
       logo: maharajaLogo,
-      description: "Authentic cuisine and fine dining experience",
-      location: "Jamui, Bihar",
     },
     {
-      name: "Hotel JP Grand Jamui",
-      type: "Hospitality",
       logo: hotelJPLogo,
-      description: "Luxury accommodation and hospitality services",
-      location: "Jamui, Bihar",
     },
     {
-      name: "Swagat Restaurant Jamui",
-      type: "Restaurant",
       logo: swagatLogo,
-      description: "Traditional flavors with modern ambiance",
-      location: "Jamui, Bihar",
     },
     {
-      name: "Jashn Maker",
-      type: "Event Management",
       logo: jashnLogo,
-      description: "Professional event planning and execution",
-      location: "Jamui, Bihar",
     },
     {
-      name: "Zoom Food Plaza Jamui",
-      type: "Food Court",
       logo: zoomFoodLogo,
-      description: "Multi-cuisine dining destination",
-      location: "Jamui, Bihar",
-    },
-    {
-      name: "Krishna Hotel and Family Restaurant",
-      type: "Restaurant",
-      description: "Family-friendly dining with diverse menu options",
-      location: "Jamui, Bihar",
-    },
-    {
-      name: "Hostlio",
-      type: "Tech Platform",
-      description: "Digital solutions for modern hospitality",
-      location: "Bihar",
-    },
-    {
-      name: "BMNP",
-      type: "Business",
-      description: "Business solutions and consulting services",
-      location: "Bihar",
     },
   ];
 
@@ -324,7 +278,7 @@ const Home = () => {
       <main>
         <article>
           {/* Hero Section */}
-          <section className="relative min-h-[700px] flex items-center py-20 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 overflow-hidden">
+          <section className="relative min-h-[300px] flex items-center py-10 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 overflow-hidden">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-10">
               <div
@@ -353,10 +307,10 @@ const Home = () => {
                     Media Dost
                   </span>
                 </h1>
-                <p className="text-xl md:text-2xl mb-12 text-gray-200 max-w-3xl mx-auto leading-relaxed">
+                {/* <p className="text-xl md:text-2xl mb-12 text-gray-200 max-w-3xl mx-auto leading-relaxed">
                   Transform your brand's presence with strategic advertising
                   solutions that deliver real results
-                </p>
+                </p> */}
               </div>
               <div className="flex flex-row flex-nowrap justify-center items-stretch gap-4 md:gap-6 mt-12 max-w-4xl mx-auto">
                 <Link
@@ -400,36 +354,37 @@ const Home = () => {
           </section>
 
           {/* Browse Media by Genre Section */}
-          <section className="py-24 bg-gradient-to-br from-gray-50 to-blue-200">
+          <section className="py-10 bg-gradient-to-br from-gray-50 to-blue-200">
             <div className="container mx-auto px-4">
-              <div className="text-center mb-16">
-                <div className="inline-block px-4 py-2 bg-indigo-100 text-indigo-600 rounded-full text-sm font-semibold mb-4">
+              <div className="text-center">
+                {/* <div className="inline-block px-4 py-2 bg-indigo-100 text-indigo-600 rounded-full text-sm font-semibold mb-4">
                   EXPLORE CATEGORIES
-                </div>
-                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                </div> */}
+                <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-6">
                   Browse Media by Genre
                 </h2>
-                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                {/* <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                   Discover the perfect advertising medium for your brand across
-                  multiple categories and platforms
-                </p>
+                  multiple categories and platforms{" "}
+                </p> */}
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
+              <div className="grid grid-cols-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 md:gap-6">
                 {mediaCategories.map((category, index) => {
                   return (
                     <Link
                       key={index}
                       to={category.route}
-                      className="group bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer border border-gray-100 hover:border-indigo-200 transform hover:-translate-y-2"
+                      className="group bg-white rounded-xl p-3 md:pt-6 text-center shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer border border-gray-100 hover:border-indigo-200 transform hover:-translate-y-2"
                     >
+                      {" "}
                       <div
-                        className={`w-16 h-16 bg-gradient-to-br ${category.color} rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}
+                        className={`w-12 h-12 md:w-16 md:h-12 bg-gradient-to-br ${category.color} rounded-2xl flex items-center justify-center mx-auto mb-2 md:mb-4 group-hover:scale-110 transition-transform duration-300`}
                       >
                         <i
-                          className={`${category.icon} text-2xl text-white`}
+                          className={`${category.icon} text-lg md:text-2xl text-white`}
                         ></i>
-                      </div>
-                      <div className="text-gray-800 font-bold text-sm leading-tight">
+                      </div>{" "}
+                      <div className="text-gray-800 font-bold text-[10px] md:text-sm leading-tight">
                         {category.name}
                       </div>
                     </Link>
@@ -443,13 +398,13 @@ const Home = () => {
           <section className="py-16 bg-gradient-to-br from-gray-50 to-white overflow-hidden">
             <div className="container mx-auto px-4">
               <div className="text-center mb-12">
-                <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
                   Our Valued Clients
                 </h2>
-                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                {/* <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                   Trusted by leading businesses and institutions across Bihar.
                   We're proud to serve and grow with our esteemed clients.
-                </p>
+                </p> */}
               </div>
 
               {/* Carousel Container */}
@@ -460,36 +415,13 @@ const Home = () => {
                     {clients.map((client, index) => (
                       <div
                         key={`first-${index}`}
-                        className="flex-shrink-0 w-64 mx-2 group bg-white rounded-2xl p-4 text-center hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-indigo-200 transform hover:-translate-y-1"
+                        className="flex-shrink-0 mx-4"
                       >
-                        <div className="h-32 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl overflow-hidden">
-                          {client.logo ? (
-                            <img
-                              src={client.logo}
-                              alt={client.name}
-                              className="w-full h-full object-contain"
-                            />
-                          ) : (
-                            <div className="w-12 h-12 flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full">
-                              <i className="fas fa-building text-white text-xl"></i>
-                            </div>
-                          )}
-                        </div>
-                        <div className="text-center mt-4">
-                          <h3 className="text-lg font-bold text-gray-900 mb-1">
-                            {client.name}
-                          </h3>
-                          <p className="text-xs font-medium text-indigo-600 mb-1">
-                            {client.type}
-                          </p>
-                          <p className="text-xs text-gray-600 mb-1">
-                            {client.description}
-                          </p>
-                          <p className="text-xs text-gray-500">
-                            <i className="fas fa-map-marker-alt mr-1"></i>
-                            {client.location}
-                          </p>
-                        </div>
+                        <img
+                          src={client.logo}
+                          alt={client.name}
+                          className="h-20 w-auto object-contain"
+                        />
                       </div>
                     ))}
 
@@ -497,36 +429,13 @@ const Home = () => {
                     {clients.map((client, index) => (
                       <div
                         key={`second-${index}`}
-                        className="flex-shrink-0 w-64 mx-2 group bg-white rounded-2xl p-4 text-center hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-indigo-200 transform hover:-translate-y-1"
+                        className="flex-shrink-0 mx-4"
                       >
-                        <div className="h-32 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl overflow-hidden">
-                          {client.logo ? (
-                            <img
-                              src={client.logo}
-                              alt={client.name}
-                              className="w-full h-full object-contain"
-                            />
-                          ) : (
-                            <div className="w-12 h-12 flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full">
-                              <i className="fas fa-building text-white text-xl"></i>
-                            </div>
-                          )}
-                        </div>
-                        <div className="text-center mt-4">
-                          <h3 className="text-lg font-bold text-gray-900 mb-1">
-                            {client.name}
-                          </h3>
-                          <p className="text-xs font-medium text-indigo-600 mb-1">
-                            {client.type}
-                          </p>
-                          <p className="text-xs text-gray-600 mb-1">
-                            {client.description}
-                          </p>
-                          <p className="text-xs text-gray-500">
-                            <i className="fas fa-map-marker-alt mr-1"></i>
-                            {client.location}
-                          </p>
-                        </div>
+                        <img
+                          src={client.logo}
+                          alt={client.name}
+                          className="h-20 w-auto object-contain"
+                        />
                       </div>
                     ))}
                   </div>
@@ -549,7 +458,7 @@ const Home = () => {
                 }
 
                 .animate-scroll-left {
-                  animation: scroll-left 20s linear infinite;
+                  animation: scroll-left 5s linear infinite;
                 }
 
                 .animate-scroll-left:hover {
@@ -595,7 +504,7 @@ const Home = () => {
                     <div className="inline-block px-4 py-2 bg-indigo-100 text-indigo-600 rounded-full text-sm font-semibold mb-6">
                       WHY CHOOSE US?
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight">
+                    <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-8 leading-tight">
                       We Offer The Best Advertisement Services
                     </h2>
                   </div>
@@ -609,13 +518,12 @@ const Home = () => {
                         />
                       </div>
                       <div>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                        <h3 className="text-xl font-bold text-gray-900 mb-3">
                           Strategic Advertising Solutions
                         </h3>
-                        <p className="text-lg text-gray-600 leading-relaxed">
+                        <p className="text-md text-gray-600 leading-relaxed">
                           Industry experts plan and execute impactful, tailored
-                          ad campaigns that drive real results for your
-                          business.
+                          ad campaigns.
                         </p>
                       </div>
                     </div>
@@ -628,12 +536,12 @@ const Home = () => {
                         />
                       </div>
                       <div>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                        <h3 className="text-xl font-bold text-gray-900 mb-3">
                           Wide Range of Media Options
                         </h3>
-                        <p className="text-lg text-gray-600 leading-relaxed">
-                          Explore outdoor, digital, influencer marketing, and
-                          more - all integrated in one comprehensive platform.
+                        <p className="text-md text-gray-600 leading-relaxed">
+                          Explore outdoor, influencer marketing, and more - all
+                          in one place.
                         </p>
                       </div>
                     </div>
@@ -646,13 +554,12 @@ const Home = () => {
                         />
                       </div>
                       <div>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                        <h3 className="text-xl font-bold text-gray-900 mb-3">
                           Seamless Booking Experience
                         </h3>
-                        <p className="text-lg text-gray-600 leading-relaxed">
-                          User-friendly platform with advanced filters,
-                          interactive maps, and transparent pricing for
-                          effortless booking.
+                        <p className="text-md text-gray-600 leading-relaxed">
+                          User-friendly platform with advanced filters, maps,
+                          and transparent pricing.
                         </p>
                       </div>
                     </div>
@@ -677,13 +584,12 @@ const Home = () => {
                   <div className="inline-block px-4 py-2 bg-white bg-opacity-20 rounded-full text-sm font-semibold mb-6">
                     FREE CONSULTATION
                   </div>
-                  <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                  <h2 className="text-2xl md:text-4xl font-bold mb-6">
                     Need Expert Help?
                   </h2>
                   <p className="text-xl mb-8 text-blue-100 leading-relaxed max-w-xl">
-                    Get a free media planner consultation for your next
-                    promotion. Our experts handle strategy, placement, and
-                    optimization!
+                    Get a free media planner for your next promotion. We handle
+                    strategy and placement!
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4">
                     <Link
@@ -729,7 +635,7 @@ const Home = () => {
                 <div className="inline-block px-4 py-2 bg-indigo-100 text-indigo-600 rounded-full text-sm font-semibold mb-4">
                   LATEST INSIGHTS
                 </div>
-                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-6">
                   Read Our Featured Blogs
                 </h2>
                 <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -830,7 +736,7 @@ const Home = () => {
                 <div className="inline-block px-4 py-2 bg-white bg-opacity-20 rounded-full text-sm font-semibold mb-6 backdrop-blur-sm">
                   📧 STAY UPDATED
                 </div>
-                <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                <h2 className="text-2xl md:text-4xl font-bold mb-6">
                   Get Every Latest News
                 </h2>
                 <p className="text-xl text-gray-200 mb-12 leading-relaxed">
