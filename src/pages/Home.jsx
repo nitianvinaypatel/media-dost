@@ -320,10 +320,10 @@ const Home = () => {
                   <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                     <i className="fas fa-calendar-alt text-2xl text-white"></i>
                   </div>
-                  <span className="font-bold text-xl">Plan</span>
-                  <span className="hidden sm:block text-sm opacity-80">
-                    Media Strategy
-                  </span>
+                  <div className="text-center">
+                    <span className="font-bold text-xl block">Plan</span>
+                    <span className="block text-sm font-light opacity-80">with us</span>
+                  </div>
                 </Link>
                 <Link
                   to="/flex"
@@ -332,10 +332,10 @@ const Home = () => {
                   <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                     <i className="fas fa-palette text-2xl text-white"></i>
                   </div>
-                  <span className="font-bold text-xl">Flex</span>
-                  <span className="hidden sm:block text-sm opacity-80">
-                    Creative Design
-                  </span>
+                  <div className="text-center">
+                    <span className="font-bold text-xl block">Flex</span>
+                    <span className="block text-sm font-light opacity-80">with us</span>
+                  </div>
                 </Link>
                 <Link
                   to="/create-with-us"
@@ -344,10 +344,10 @@ const Home = () => {
                   <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                     <i className="fas fa-lightbulb text-2xl text-white"></i>
                   </div>
-                  <span className="font-bold text-xl">Create</span>
-                  <span className="hidden sm:block text-sm opacity-80">
-                    With Us
-                  </span>
+                  <div className="text-center">
+                    <span className="font-bold text-xl block">Create</span>
+                    <span className="block text-sm font-light opacity-80">with us</span>
+                  </div>
                 </Link>
               </div>
             </div>

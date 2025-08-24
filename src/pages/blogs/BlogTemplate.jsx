@@ -55,7 +55,7 @@ function BlogTemplate({ blogData, children }) {
       </Helmet>
 
       {/* Article Header */}
-      <header className="relative py-24 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white overflow-hidden">
+      <header className="relative pt-12 sm:pt-16 pb-16 sm:pb-20 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div
             className="absolute top-0 left-0 w-full h-full"
@@ -69,9 +69,9 @@ function BlogTemplate({ blogData, children }) {
         <div className="container mx-auto px-4 relative z-10">
           <Link
             to="/blog"
-            className="inline-flex items-center text-white hover:text-gray-200 mb-8 transition-colors"
+            className="inline-flex items-center text-white hover:text-gray-200 mb-6 sm:mb-8 text-sm sm:text-base font-medium transition-colors group"
           >
-            <IoArrowBack className="mr-2" />
+            <IoArrowBack className="mr-2 transform group-hover:-translate-x-1 transition-transform" />
             Back to Blog
           </Link>
 

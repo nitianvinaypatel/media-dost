@@ -12,7 +12,7 @@ import AudienceSection from "./FormSections/AudienceSection";
 import MediaSection from "./FormSections/MediaSection";
 
 const PlanForm = ({ onSubmit }) => {
-  const [activeSection, setActiveSection] = useState("brand");
+  const [activeSection, setActiveSection] = useState("");
   const [completedSections, setCompletedSections] = useState([]);
   const [formData, setFormData] = useState({
     brand: {},
@@ -22,7 +22,8 @@ const PlanForm = ({ onSubmit }) => {
   });
 
   const handleSectionChange = (section) => {
-    setActiveSection(section);
+    // Toggle section - if clicking the active section, close it
+    setActiveSection(prev => prev === section ? "" : section);
   };
 
   const updateFormData = (section, data) => {
@@ -40,6 +41,12 @@ const PlanForm = ({ onSubmit }) => {
     onSubmit(formData);
   };
 
+  const getNextSectionId = (currentSection) => {
+    const sectionOrder = ["brand", "campaign", "audience", "media"];
+    const currentIndex = sectionOrder.indexOf(currentSection);
+    return sectionOrder[currentIndex + 1] || "";
+  };
+
   const sections = [
     {
       id: "brand",
@@ -49,7 +56,10 @@ const PlanForm = ({ onSubmit }) => {
         <BrandSection
           data={formData.brand}
           onChange={(data) => updateFormData("brand", data)}
-          onNext={() => handleSectionChange("campaign")}
+          onNext={() => {
+            const nextSection = getNextSectionId("brand");
+            setCompletedSections(prev => [...new Set([...prev, "brand"])]);
+          }}
         />
       ),
     },
@@ -61,7 +71,10 @@ const PlanForm = ({ onSubmit }) => {
         <CampaignSection
           data={formData.campaign}
           onChange={(data) => updateFormData("campaign", data)}
-          onNext={() => handleSectionChange("audience")}
+          onNext={() => {
+            const nextSection = getNextSectionId("campaign");
+            setCompletedSections(prev => [...new Set([...prev, "campaign"])]);
+          }}
         />
       ),
     },
@@ -73,7 +86,10 @@ const PlanForm = ({ onSubmit }) => {
         <AudienceSection
           data={formData.audience}
           onChange={(data) => updateFormData("audience", data)}
-          onNext={() => handleSectionChange("media")}
+          onNext={() => {
+            const nextSection = getNextSectionId("audience");
+            setCompletedSections(prev => [...new Set([...prev, "audience"])]);
+          }}
         />
       ),
     },
@@ -136,7 +152,7 @@ const PlanForm = ({ onSubmit }) => {
           <button
             type="button"
             onClick={() => handleSectionChange(section.id)}
-            className={`w-full flex items-center p-6 text-left transition-all ${
+            className={`w-full flex items-center p-6 text-left transition-all cursor-pointer group ${
               activeSection === section.id
                 ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-t-xl"
                 : completedSections.includes(section.id)

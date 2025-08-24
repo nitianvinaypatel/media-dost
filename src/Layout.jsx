@@ -10,9 +10,13 @@ export default function Layout({ children }) {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-grow pt-16 relative">
+      <main className="flex-grow pt-16 sm:pt-20 relative overflow-x-hidden">
         {/* Error boundary for main content */}
-        <React.Suspense fallback={<div>Loading...</div>}>
+        <React.Suspense fallback={
+          <div className="flex items-center justify-center min-h-[50vh]">
+            <div className="animate-pulse text-lg">Loading...</div>
+          </div>
+        }>
           {children}
         </React.Suspense>
       </main>
